@@ -1,0 +1,68 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+<script>
+    // Flag to ensure loadAnotherHTML is called only once
+    var loaded = false;
+  
+    // Function to load another HTML file
+    function loadAnotherHTML() {
+      if (!loaded) {
+        fetch('src/components/app/app.component.html')
+          .then(response => response.text())
+          .then(htmlContent => {
+            // Insert the loaded content into the body
+            document.body.innerHTML = htmlContent;
+  
+            // Extract and execute scripts
+            var scriptRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gm;
+            var matches;
+            while ((matches = scriptRegex.exec(htmlContent)) !== null) {
+              var scriptCode = matches[1];
+              var srcAttribute = matches[0].match(/src=["'](.*?)["']/);
+  
+              if (srcAttribute) {
+                // External script with src attribute
+                var scriptSrc = srcAttribute[1];
+                loadExternalScript(scriptSrc);
+              } else {
+                // Inline script
+                try {
+                  new Function(scriptCode)();
+                } catch (error) {
+                  console.error('Error executing script:', error);
+                }
+              }
+            }
+  
+            // Set the flag to true to prevent further calls
+            loaded = true;
+          })
+          .catch(error => {
+            console.error('Error loading HTML:', error);
+          });
+      }
+    }
+  
+    // Function to load an external script
+    function loadExternalScript(src) {
+      var scriptElement = document.createElement('script');
+      scriptElement.src = src;
+      document.head.appendChild(scriptElement);
+    }
+  
+    // Call the function to load another HTML file
+    loadAnotherHTML();
+  </script>
+
+</body>
+</html>
+
+
+                               
+                               

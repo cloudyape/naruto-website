@@ -1,0 +1,23 @@
+.perfect-center {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.full-height {
+    height: 92vH;
+}
+
+nav {
+    position: fixed;
+}
+
+h1, h2 {
+    color: #fe5e54 !important;
+}
+
+img {
+    width: 100%;
+    border: 2px solid #000;
+}

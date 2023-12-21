@@ -1,0 +1,41 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+<script src="../../../src/static/js/main.js"></script>
+<script src="../../../src/components/sidebar/sidebar.component.js"></script>
+<link href="../../../src/components/sidebar/sidebar.component.css" rel="stylesheets">
+<script>
+  // Function to dynamically add a stylesheet
+  function addStyleSheet(url) {
+    var link = document.createElement('link');
+    link.href = url;
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }
+
+  // Function to dynamically add a script
+  function addScript(url) {
+    console.log(url);
+    var script = document.createElement('script');
+    script.src = url;
+    document.head.appendChild(script);
+  }
+  // Add the stylesheet dynamically
+  addStyleSheet("../../.." + '/src/components/sidebar/sidebar.component.css?' + 'nocache=' + new Date().getTime());
+  // Add the script dynamically
+  addScript("../../.." + '/src/components/sidebar/sidebar.component.js?' + 'nocache=' + new Date().getTime());
+</script>
+<!-------------HTML BELOW-------------->
+<div class="sidebar_component" id="sidebar_component">
+  <div class="text">
+    <div class="sidebar">
+      <a href="/">Introduction</a>
+      <a href="/gettingStarted">Getting Started</a>
+      <a href="/component">Component</a>
+      <a href="/backend">Backend</a>
+      <a href="/deployment">Deployment</a>
+    </div>
+  </div>
+</div>
