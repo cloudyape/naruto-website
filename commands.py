@@ -1,3 +1,5 @@
+import html
+import json
 import re
 import subprocess
 import sys
@@ -11,6 +13,7 @@ import io
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+import os
 
  
 def get_dir_size(path='.'):
@@ -172,7 +175,7 @@ def main(file_path):
                 
                     print("**************************************************")
                     file = io.open("flag.html", "w", encoding='utf-8')
-                    file.write('''
+                    file.write(r'''
 
 <!DOCTYPE html>
 <html>
@@ -248,6 +251,13 @@ def main(file_path):
     ]
 }                               
                                ''')
+                    file = io.open("apikey.py", "w", encoding='utf-8')
+                    file.write(r'''
+import json
+def handle_open_ai_key():
+    # Handle API requests here
+    return "Your Open AI Key Here"
+''')
                     # Creating directories
                     directories = [
                         "backend",
@@ -276,7 +286,7 @@ def handle_api_request(path):
     else:
         return {'error': 'Endpoint not found'}''')
                     file = io.open("src/static/js/main.js", "w", encoding='utf-8')
-                    file.write('''
+                    file.write(r'''
 function loadTag(tagName) {
     document.addEventListener("DOMContentLoaded", function () {
         var tagNameTags = document.querySelectorAll(tagName);
@@ -495,6 +505,47 @@ updateHtml()
         elif user_input.lower() == "exit":
             print("naruto dead")
             break
+        elif user_input.lower().startswith("naruto auto create"):
+            from openai import OpenAI
+            from apikey import handle_open_ai_key
+            client = OpenAI(
+                # This is the default and can be omitted
+                api_key= handle_open_ai_key(),
+            )
+            split_comp = user_input.lower().split(" ")
+            myfile = input("Enter Component Name Eg. (app): ")
+            fileName = "src/components/" + myfile + "/" + myfile + ".component.html"
+            getPrompt = input("Enter Prompt : ")
+            fileName = open(fileName, 'r')
+            htmlContent = fileName.read()
+            soup = BeautifulSoup(htmlContent, 'html.parser')
+            chat_completion = client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": getPrompt,
+                    }
+                ],
+                model="gpt-3.5-turbo",
+            )
+
+            if chat_completion and chat_completion.choices:
+                html_content = chat_completion.choices[0].message.content
+                decoded_html_content = html.unescape(html_content)
+                
+                for tag in soup.find_all(text=True):
+                    if split_comp[3] in tag:
+                        parent = tag.parent
+                        new_tag = str(tag).replace("@@" + split_comp[3] + "@@", decoded_html_content)
+                        tag.replace_with(BeautifulSoup(new_tag, "html.parser"))
+
+                with open(str(fileName.name), 'w') as NewFileName:
+                    NewFileName.write(str(soup))
+                    print("**************************************************")
+                    print("Replaced " + split_comp[3] + " in component " + str(fileName.name))
+                    print("**************************************************")
+
+                        
         elif user_input.lower().startswith("naruto n c"):
             print("**************************************************")
             split_comp = user_input.lower().split(" ")

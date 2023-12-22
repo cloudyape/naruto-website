@@ -4,7 +4,8 @@
     {"path": "/gettingStarted", "component": "gettingstarted/gettingstarted.component.html"},
     {"path": "/component", "component": "component/component.component.html"},
     {"path": "/backend", "component": "backend/backend.component.html"},
-    {"path": "/deployment", "component": "deployment/deployment.component.html"}
+    {"path": "/deployment", "component": "deployment/deployment.component.html"},
+    {"path": "/ai", "component": "ai/ai.component.html"}
     ]
 }                               
                                
