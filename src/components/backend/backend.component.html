@@ -44,6 +44,24 @@
                                     <li>
                                         Go to backend -> app -> index.py and set Endpoints and logic there. Yes its that simple :-)
                                     </li>
+                                    <li>
+                                        Add logic in manner BELOW--------------
+                                        <pre>
+def handle_api_request(path, payload=None):
+    # Handle API requests here
+    if path == "/api/data":
+        if payload:
+            # Assuming payload is in JSON format
+            data = json.loads(payload)
+            # Your logic with the received payload data can go here
+            response = {'message': f'Hello from API! Received payload: {data}'}
+            return response
+        else:
+            return {'error': 'Payload is missing'}
+    else:
+        return {'error': 'Endpoint not found'}
+                                        </pre>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="col-lg-3"></div>
